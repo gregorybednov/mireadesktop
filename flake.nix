@@ -103,7 +103,6 @@ fi
 #		ghc $src -o $out/bin/weekday
 #	    '';
 #};
-    tint2 = pkgs.writeScriptBin "tint2" "${pkgs.tint2}/bin/tint2 -c ${tint2config}";
     preparejgmenu = (pkgs.writeShellScript "preparejgmenu"
 ''
 str=$(cat - | sed "/soffice --math/d; /soffice --draw/d; /startcenter/d; /soffice --base/d; /apps-dir-Settings/d; /tint2conf/d; /nvidia-settings/d; /--desktop-pref/d; /xterm/d; /jgmenu/d; /tint2/d;
@@ -118,7 +117,7 @@ s/\^tag(apps-dir-Database)/\^tag(apps-dir-Database)\nArchi (Archimate Modeling T
 
 printf "$str\n\n^tag(apps-dir-Powermenu)\nВыключить,${powermenu} poweroff,,,#System\nПерезагрузить,${powermenu} reboot,,,#System\n"
 '');
-    myxinitrc = pkgs.writeText ".xinitrc" "${tint2} &\n${pkgs.pcmanfm}/bin/pcmanfm --desktop &\nexec ${pkgs.metacity}";
+    myxinitrc = pkgs.writeText ".xinitrc" "${pkgs.tint2}/bin/tint2 -c ${tint2config} &\n${pkgs.pcmanfm}/bin/pcmanfm --desktop &\nexec ${pkgs.metacity}/bin/metacity";
     startmireadesktop = pkgs.writeShellScript "startmireadesktop"
     ''
         if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty ]]; then
