@@ -33,7 +33,7 @@ ${tint2conf1}
 #-------------------------------------
 button = new
 button_lclick_command = ${jgmenu_run_prepared}
-button_icon = ${wallpaper}
+button_icon = ${self}/wallpaper.svg
 
 separator = new
 separator_style = empty
@@ -45,7 +45,7 @@ button_icon = ${pkgs.chromium}/share/icons/hicolor/48x48/apps/chromium.png
 
 button = new
 button_lclick_command = ${pkgs.pcmanfm}/bin/pcmanfm
-button_icon = ${folderIcon}
+button_icon = ${self}/folderIcon.svg
 
 separator = new
 separator_style = empty
@@ -121,13 +121,13 @@ printf "$str\n\n^tag(apps-dir-Powermenu)\nВыключить,${powermenu} powero
     startmireadesktop = pkgs.writeShellScript "startmireadesktop"
     ''
         if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty ]]; then
-            mkdir -p $HOME/.config/pcmanfm/default
-            rm -rf $HOME/.config/pcmanfm/default/*
-            cp ${desktopItems0} $HOME/.config/default/desktop-items-0.conf
-            cp ${pcmanfmConf} $HOME/.config/pcmanfm/default/pcmanfm.conf
-            chmod +w $HOME/.config/pcmanfm/default/*
-            mkdir -p $HOME/.config/gtk-3.0
-            printf "[Settings]\ngtk-icon-theme-name = WhiteSur" > $HOME/.config/gtk-3.0/settings.ini
+            mkdir -p "$HOME/.config/pcmanfm/default"
+            rm -rf "$HOME/.config/pcmanfm/default/*"
+            cp ${desktopItems0} "$HOME/.config/default/desktop-items-0.conf"
+            cp ${pcmanfmConf} "$HOME/.config/pcmanfm/default/pcmanfm.conf"
+            chmod +w "$HOME/.config/pcmanfm/default/*"
+            mkdir -p "$HOME/.config/gtk-3.0"
+            printf "[Settings]\ngtk-icon-theme-name = WhiteSur" > "$HOME/.config/gtk-3.0/settings.ini"
             startx ${myxinitrc}
         fi
     '';
