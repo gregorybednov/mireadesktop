@@ -4,9 +4,9 @@
     outputs = { self, nixpkgs, ... }:
         let
             pkgs = import nixpkgs { system = "x86_64-linux"; };
-            wallpaper = builtins.readFile "./wallpaper.svg";
-            folderIcon = builtins.readFile "./folderIcon.svg"; 
-            pcmanfmConf = builtins.readFile "./pcmanfm.conf";
+            wallpaper = builtins.readFile "${self}/wallpaper.svg";
+            folderIcon = builtins.readFile "${self}/folderIcon.svg"; 
+            pcmanfmConf = builtins.readFile "${self}/pcmanfm.conf";
             desktopItems0 = (pkgs.writeText "desktop-items-0.conf"
 ''
 [*]
@@ -25,8 +25,8 @@ show_documents=0
 show_trash=1
 show_mounts=1
 '');
-            tint2conf1 = builtins.readFile "./tint2conf.1";
-            tint2conf2 = builtins.readFile "./tint2conf.2";
+            tint2conf1 = builtins.readFile "${self}/tint2conf.1";
+            tint2conf2 = builtins.readFile "${self}/tint2conf.2";
             tint2config = pkgs.writeText "tint2conf"
 ''
 ${tint2conf1}
@@ -94,7 +94,7 @@ fi
     mireaweek = pkgs.stdenv.mkDerivation rec {
 	    pname = "mireaweek";
 	    version = "0.2.0";
-	    src = ./weekday.hs;
+	    src = ${self}/weekday.hs;
 	    dontInstall = true;
 	    dontUnpack = true;
 	    nativeBuildInputs = [pkgs.ghc];
