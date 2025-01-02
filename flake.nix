@@ -94,7 +94,7 @@ fi
     mireaweek = pkgs.stdenv.mkDerivation rec {
 	    pname = "mireaweek";
 	    version = "0.2.0";
-	    src = ${self}/weekday.hs;
+	    src = "${self}/weekday.hs";
 	    dontInstall = true;
 	    dontUnpack = true;
 	    nativeBuildInputs = [pkgs.ghc];
