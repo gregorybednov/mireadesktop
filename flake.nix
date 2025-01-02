@@ -128,7 +128,7 @@ printf "$str\n\n^tag(apps-dir-Powermenu)\nВыключить,${powermenu} powero
             chmod +w "$HOME/.config/pcmanfm/default/*"
             mkdir -p "$HOME/.config/gtk-3.0"
             printf "[Settings]\ngtk-icon-theme-name = WhiteSur" > "$HOME/.config/gtk-3.0/settings.ini"
-            startx ${myxinitrc}
+            XINITRC=${myxinitrc} startx
         fi
     '';
 in {
