@@ -1,8 +1,13 @@
-let
-    wallpaper = builtins.readFile "./wallpaper.svg";
-    folderIcon = builtins.readFile "./folderIcon.svg"; 
-    pcmanfmConf = builtins.readFile "./pcmanfm.conf";
-    desktopItems0 = (pkgs.writeText "desktop-items-0.conf"
+{
+    description = "MIREA desktop";
+    inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    outputs = { self, nixpkgs, ... }:
+        let
+            pkgs = import nixpkgs { system = "x86_64-linux"; };
+            wallpaper = builtins.readFile "./wallpaper.svg";
+            folderIcon = builtins.readFile "./folderIcon.svg"; 
+            pcmanfmConf = builtins.readFile "./pcmanfm.conf";
+            desktopItems0 = (pkgs.writeText "desktop-items-0.conf"
 ''
 [*]
 wallpaper_mode=center
@@ -20,9 +25,9 @@ show_documents=0
 show_trash=1
 show_mounts=1
 '');
-    tint2conf1 = builtins.readFile "./tint2conf.1";
-    tint2conf2 = builtins.readFile "./tint2conf.2";
-    tint2config = pkgs.writeText "tint2conf"
+            tint2conf1 = builtins.readFile "./tint2conf.1";
+            tint2conf2 = builtins.readFile "./tint2conf.2";
+            tint2config = pkgs.writeText "tint2conf"
 ''
 ${tint2conf1}
 #-------------------------------------
@@ -70,11 +75,11 @@ execp_padding = 5 5
 
 ${tint2conf2}
 '';
-jgmenu_run_prepared = 
+        jgmenu_run_prepared = 
         (pkgs.writeShellScript "jgmenu_run_prepared" ''
         ${pkgs.jgmenu}/bin/jgmenu_run apps | ${preparejgmenu} | ${pkgs.jgmenu}/bin/jgmenu --simple
 '');
-powermenu = (pkgs.writeShellScript "powermenu"
+        powermenu = (pkgs.writeShellScript "powermenu"
 ''
 if [ "$1" = "poweroff" ]; then
 	${pkgs.zenity}/bin/zenity --question --text "Уверены, что хотите выключить?" --default-cancel && poweroff
@@ -89,44 +94,7 @@ fi
     mireaweek = pkgs.stdenv.mkDerivation rec {
 	    pname = "mireaweek";
 	    version = "0.2.0";
-	    src = pkgs.writeTextFile {
-		    name = "weekday.hs";
-		    text = ''
-import Data.Time
-import Data.Time.Calendar.WeekDate (toWeekDate)
-
-data Period = Autumn
-            | Winter
-            | Spring
-            deriving (Show, Eq)
-
-period :: (Ord a, Num t) => (MonthOfYear -> t -> a) -> a -> Period
-period thisYear today
-    | today < thisYear February 9 = Winter
-    | today >= thisYear September 1 = Autumn
-    | otherwise = Spring 
-
-week :: Period -> Day -> String
-week Winter _ = "Хороших праздников, удачной сессии!"
-week p d
-    | dayOfWeek d == Sunday = "Сегодня воскресенье, лучше иди домой"
-    | otherwise = show x ++ " неделя" where
-                        x = 1 + x0 - x1 - if limitIsSunday then 1 else 0
-                        limitIsSunday = dayOfWeek limit == Sunday 
-                        (_, x1, _) = toWeekDate limit
-                        (y, x0, _) = toWeekDate d
-                        limit = if p == Spring
-                            then this February 9
-                            else this September 1
-                        this = fromGregorian y
-main :: IO ()
-main = do
-    now <- getCurrentTime
-    let today = utctDay now
-    --let today = fromGregorian 2024 September 9 -- it was TEST
-    let (year,_,_) = toGregorian today
-    putStr $ week (period (fromGregorian year) today) today'';
-	    };
+	    src = ./weekday.hs;
 	    dontInstall = true;
 	    dontUnpack = true;
 	    nativeBuildInputs = [pkgs.ghc];
@@ -151,5 +119,14 @@ s/\^tag(apps-dir-Database)/\^tag(apps-dir-Database)\nArchi (Archimate Modeling T
 printf "$str\n\n^tag(apps-dir-Powermenu)\nВыключить,${powermenu} poweroff,,,#System\nПерезагрузить,${powermenu} reboot,,,#System\n"
 '');
     myxinitrc = pkgs.writeText ".xinitrc" "${tint2} &\n${pkgs.pcmanfm}/bin/pcmanfm --desktop &\nexec ${pkgs.metacity}";
-in
-    myxinitrc;
+    startmireadesktop = pkgs.writeShellScript "startmireadesktop"
+    ''
+        if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty ]]; then
+            startx ${myxinitrc}
+        fi
+    '';
+in {
+    packages.x86_64-linux.xinitrc = startmireadesktop;
+    defaultPackage.x86_64-linux = startmireadesktop;
+};
+}
