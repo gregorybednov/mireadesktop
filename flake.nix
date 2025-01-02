@@ -65,7 +65,7 @@ execp_padding = 5 5
 #-------------------------------------
 execp = new
 execp_name = mireaweek
-execp_command = ${mireaweek}/bin/weekday
+#execp_command = ${mireaweek}/bin/weekday # TODO!!!
 execp_interval = 0
 execp_font = mono 10
 execp_font_color = #dddddd 100
@@ -91,18 +91,18 @@ if [ "$1" = "reboot" ]; then
 	exit 0
 fi
 '');
-    mireaweek = pkgs.stdenv.mkDerivation rec {
-	    pname = "mireaweek";
-	    version = "0.2.0";
-	    src = "${self}/weekday.hs";
-	    dontInstall = true;
-	    dontUnpack = true;
-	    nativeBuildInputs = [pkgs.ghc];
-	    buildPhase = ''
-		mkdir -p $out/bin
-		ghc $src -o $out/bin/weekday
-	    '';
-};
+#    mireaweek = pkgs.stdenv.mkDerivation rec {
+#	    pname = "mireaweek";
+#	    version = "0.2.0";
+#	    src = "${self}/weekday.hs";
+#	    dontInstall = true;
+#	    dontUnpack = true;
+#	    nativeBuildInputs = [pkgs.ghc];
+#	    buildPhase = ''
+#		mkdir -p $out/bin
+#		ghc $src -o $out/bin/weekday
+#	    '';
+#};
     tint2 = pkgs.writeScriptBin "tint2" "${pkgs.tint2}/bin/tint2 -c ${tint2config}";
     preparejgmenu = (pkgs.writeShellScript "preparejgmenu"
 ''
