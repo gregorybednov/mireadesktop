@@ -120,7 +120,7 @@ printf "$str\n\n^tag(apps-dir-Powermenu)\nВыключить,${powermenu} powero
     myxinitrc = pkgs.writeText ".xinitrc" "${pkgs.tint2}/bin/tint2 -c ${tint2config} &\n${pkgs.pcmanfm}/bin/pcmanfm --desktop &\nexec ${pkgs.metacity}/bin/metacity";
     startmireadesktop = pkgs.writeShellScript "startmireadesktop"
     ''
-        if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty ]]; then
+        if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
             mkdir -p "$HOME/.config/pcmanfm/default"
             rm -rf "$HOME/.config/pcmanfm/default/*"
             cp ${desktopItems0} "$HOME/.config/default/desktop-items-0.conf"
