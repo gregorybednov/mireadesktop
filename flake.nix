@@ -65,7 +65,7 @@ execp_padding = 5 5
 #-------------------------------------
 execp = new
 execp_name = mireaweek
-#execp_command = ${mireaweek}/bin/weekday # TODO!!!
+#execp_command = $ mireaweek}/bin/weekday # TODO!!!
 execp_interval = 0
 execp_font = mono 10
 execp_font_color = #dddddd 100
