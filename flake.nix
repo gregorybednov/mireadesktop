@@ -126,7 +126,7 @@ printf "$str\n\n^tag(apps-dir-Powermenu)\nВыключить,${powermenu} powero
         fi
     '';
 in {
-    packages.x86_64-linux.xinitrc = startmireadesktop;
+    packages.x86_64-linux.startmireadesktop = startmireadesktop;
     defaultPackage.x86_64-linux = startmireadesktop;
 };
 }
