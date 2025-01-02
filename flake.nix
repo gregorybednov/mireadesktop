@@ -6,7 +6,7 @@
             pkgs = import nixpkgs { system = "x86_64-linux"; };
             wallpaper = builtins.readFile "${self}/wallpaper.svg";
             folderIcon = builtins.readFile "${self}/folderIcon.svg"; 
-            pcmanfmConf = builtins.readFile "${self}/pcmanfm.conf";
+            pcmanfmConf = "${self}/pcmanfm.conf";
             desktopItems0 = (pkgs.writeText "desktop-items-0.conf"
 ''
 [*]
