@@ -117,7 +117,7 @@ s/\^tag(apps-dir-Database)/\^tag(apps-dir-Database)\nArchi (Archimate Modeling T
 
 printf "$str\n\n^tag(apps-dir-Powermenu)\nВыключить,${powermenu} poweroff,,,#System\nПерезагрузить,${powermenu} reboot,,,#System\n"
 '');
-    myxinitrc = pkgs.writeText ".xinitrc" "${pkgs.tint2}/bin/tint2 -c ${tint2config} &\n${pkgs.pcmanfm}/bin/pcmanfm --desktop &\nexec ${pkgs.metacity}/bin/metacity";
+    myxinitrc = pkgs.writeText ".xinitrc" "${tint2custom} &\n${pcmanfmdesktop} &\nexec ${pkgs.metacity}/bin/metacity";
     startmireadesktop = pkgs.writeShellScript "startmireadesktop"
     ''
         if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
@@ -131,7 +131,17 @@ printf "$str\n\n^tag(apps-dir-Powermenu)\nВыключить,${powermenu} powero
             XINITRC=${myxinitrc} startx
         fi
     '';
+tint2custom = pkgs.writeShellScript "tint2"
+''
+${pkgs.tint2}/bin/tint2 -c ${tint2config}
+'';
+pcmanfmdesktop = pkgs.writeShellScript "pcmanfm"
+''
+${pkgs.pcmanfm}/bin/pcmanfm --desktop 
+'';
 in {
+    packages.x86_64-linux.tint2 = tint2custom;
+    packages.x86_64-linux.pcmanfm = pcmanfmdesktop;
     packages.x86_64-linux.startmireadesktop = startmireadesktop;
     defaultPackage.x86_64-linux = startmireadesktop;
 };
