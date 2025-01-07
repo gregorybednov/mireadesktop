@@ -109,7 +109,6 @@ str=$(cat - | sed "/soffice --math/d; /soffice --draw/d; /IntelliJ IDEA CE/d; /s
 s/,applications-system/,applications-system,\nВыключение...,^checkout(apps-dir-Powermenu),applications-powermenu/;
 s/\^tag(apps-dir-Powermenu)/\^tag(apps-dir-Powermenu)\nArchi (Archimate Modeling Tool),Archi,Archi,,#Education/; 
 s/(Free Java.*)//;
-s/IntelliJ IDEA Community//; 
 s/,applications-office/,applcations-office\nБД и проек-ие,^checkout(apps-dir-Database),applications-database/;
 /\^tag(apps-dir-Education)/d;
 s/apps-dir-Other/apps-dir-Database/;
