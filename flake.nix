@@ -91,23 +91,25 @@ if [ "$1" = "reboot" ]; then
 	exit 0
 fi
 '');
-#    mireaweek = pkgs.stdenv.mkDerivation rec {
-#	    pname = "mireaweek";
-#	    version = "0.2.0";
-#	    src = "${self}/weekday.hs";
-#	    dontInstall = true;
-#	    dontUnpack = true;
-#	    nativeBuildInputs = [pkgs.ghc];
-#	    buildPhase = ''
-#		mkdir -p $out/bin
-#		ghc $src -o $out/bin/weekday
-#	    '';
-#};
+    mireaweek = pkgs.stdenv.mkDerivation rec {
+	    pname = "mireaweek";
+	    version = "0.2.0";
+	    src = ./weekday.hs;
+	    dontInstall = true;
+	    dontUnpack = true;
+	    nativeBuildInputs = [pkgs.ghc];
+	    buildPhase = ''
+		mkdir -p $out/bin
+		ghc $src -o $out/bin/weekday
+	    '';
+};
     preparejgmenu = (pkgs.writeShellScript "preparejgmenu"
 ''
-str=$(cat - | sed "/soffice --math/d; /soffice --draw/d; /startcenter/d; /soffice --base/d; /apps-dir-Settings/d; /tint2conf/d; /nvidia-settings/d; /--desktop-pref/d; /xterm/d; /jgmenu/d; /tint2/d;
+str=$(cat - | sed "/soffice --math/d; /soffice --draw/d; /IntelliJ IDEA CE/; /startcenter/d; /soffice --base/d; /apps-dir-Settings/d; /tint2conf/d; /nvidia-settings/d; /--desktop-pref/d; /xterm/d; /jgmenu/d; /tint2/d;
 s/,applications-system/,applications-system,\nВыключение...,^checkout(apps-dir-Powermenu),applications-powermenu/;
 s/\^tag(apps-dir-Powermenu)/\^tag(apps-dir-Powermenu)\nArchi (Archimate Modeling Tool),Archi,Archi,,#Education/; 
+s/(Free Java.*)//;
+s/IntelliJ IDEA Community//; 
 s/,applications-office/,applcations-office\nБД и проек-ие,^checkout(apps-dir-Database),applications-database/;
 /\^tag(apps-dir-Education)/d;
 s/apps-dir-Other/apps-dir-Database/;
