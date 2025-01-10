@@ -105,7 +105,7 @@ fi
 };
     preparejgmenu = (pkgs.writeShellScript "preparejgmenu"
 ''
-str=$(cat - | sed "/soffice --math/d; /soffice --draw/d; /IntelliJ IDEA CE/d; /startcenter/d; /soffice --base/d; /apps-dir-Settings/d; /tint2conf/d; /nvidia-settings/d; /--desktop-pref/d; /xterm/d; /jgmenu/d; /tint2/d;
+str=$(cat - | sed "/soffice --math/d; /soffice --draw/d; /IntelliJ IDEA Community Edition/d; /startcenter/d; /soffice --base/d; /apps-dir-Settings/d; /tint2conf/d; /nvidia-settings/d; /--desktop-pref/d; /xterm/d; /jgmenu/d; /tint2/d;
 s/,applications-system/,applications-system,\nВыключение...,^checkout(apps-dir-Powermenu),applications-powermenu/;
 s/\^tag(apps-dir-Powermenu)/\^tag(apps-dir-Powermenu)\nArchi (Archimate Modeling Tool),Archi,Archi,,#Education/; 
 s/(Free Java.*)//;
