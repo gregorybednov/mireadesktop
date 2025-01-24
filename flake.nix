@@ -13,7 +13,7 @@
 wallpaper_mode=center
 wallpaper_common=1
 wallpapers_configured=1
-wallpaper=${wallpaper}
+wallpaper=${self}/wallpaper.svg
 desktop_bg=#77767b
 desktop_fg=#ffffff
 desktop_shadow=#000000
