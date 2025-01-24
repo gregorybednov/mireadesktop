@@ -124,7 +124,7 @@ fi
     myxinitrc = pkgs.writeText ".xinitrc" "${tint2custom} &\n${pcmanfmdesktop} &\nexec ${pkgs.metacity}/bin/metacity";
     startmireadesktop = pkgs.writeShellScript "startmireadesktop"
     ''
-            rm -rf ${HOME}/{*,.*} 2> /dev/null # wipe student directory, yeah!
+            rm -rf $HOME/{*,.*} 2> /dev/null # wipe student directory, yeah!
             printf "[client]\nport=3306\nuser=root" > /home/student/.my.cnf
             echo "\set user postgres" > /home/student/.psqlrc
             mkdir -p "$HOME/.config/pcmanfm/default"
