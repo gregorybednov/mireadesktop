@@ -100,7 +100,7 @@ fi
 	    buildPhase = ''
 		mkdir -p $out/{bin,lib}
 		kotlinc $src -d -include-runtime $out/lib/mireaweek.jar
-                printf "${pkgs.java}/bin/java -jar ../lib/mireaweek.jar" > $out/bin/mireaweek
+                printf "${pkgs.jre}/bin/java -jar ../lib/mireaweek.jar" > $out/bin/mireaweek
 		chmod +x $out/bin/mireaweek
 	    '';
       
@@ -115,7 +115,7 @@ fi
 	    buildPhase = ''
 		mkdir -p $out/{bin,lib}
 		kotlinc $src -d -include-runtime $out/lib/prepare.jar
-                printf "${pkgs.java}/bin/java -jar ../lib/prepare.jar" > $out/bin/prepare_jgmenu
+                printf "${pkgs.jre}/bin/java -jar ../lib/prepare.jar" > $out/bin/prepare_jgmenu
 		chmod +x $out/bin/prepare_jgmenu
 	    '';
     };
