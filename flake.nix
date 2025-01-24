@@ -128,8 +128,8 @@ fi
         printf "[client]\nport=3306\nuser=root" > /home/student/.my.cnf
         echo "\set user postgres" > /home/student/.psqlrc
         mkdir -p "$HOME/.config/pcmanfm/default"
-        cp ${desktopItems0} "$HOME/.config/default/desktop-items-0.conf"
-        cp ${pcmanfmConf} "$HOME/.config/pcmanfm/default/pcmanfm.conf"
+        cp ${desktopItems0} "$HOME/.config/pcmanfm/default/desktop-items-0.conf"
+        cp   ${pcmanfmConf} "$HOME/.config/pcmanfm/default/pcmanfm.conf"
         chmod +w "$HOME/.config/pcmanfm/default/*"
         mkdir -p "$HOME/.config/gtk-3.0"
         printf "[Settings]\ngtk-icon-theme-name = WhiteSur" > "$HOME/.config/gtk-3.0/settings.ini"
