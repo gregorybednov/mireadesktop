@@ -65,7 +65,7 @@ execp_padding = 5 5
 #-------------------------------------
 execp = new
 execp_name = mireaweek
-#execp_command = $ mireaweek}/bin/weekday # TODO!!!
+execp_command = ${mireaweek}/bin/mireaweek
 execp_interval = 0
 execp_font = mono 10
 execp_font_color = #dddddd 100
@@ -76,9 +76,8 @@ execp_padding = 5 5
 ${tint2conf2}
 '';
         jgmenu_run_prepared = 
-        (pkgs.writeShellScript "jgmenu_run_prepared" ''
-        ${pkgs.jgmenu}/bin/jgmenu_run apps | ${preparejgmenu} | ${pkgs.jgmenu}/bin/jgmenu --simple
-'');
+        (pkgs.writeShellScript "jgmenu_run_prepared"
+        ''${pkgs.jgmenu}/bin/jgmenu_run apps | ${prepare_jgmenu}/bin/prepare_jgmenu | ${pkgs.jgmenu}/bin/jgmenu --simple'');
         powermenu = (pkgs.writeShellScript "powermenu"
 ''
 if [ "$1" = "poweroff" ]; then
@@ -92,32 +91,34 @@ if [ "$1" = "reboot" ]; then
 fi
 '');
     mireaweek = pkgs.stdenv.mkDerivation rec {
-	    pname = "mireaweek";
-	    version = "0.2.0";
-	    src = ./weekday.hs;
+            pname = "mireaweek";
+            version = "0.1.0";
+            src = ./weekday.kt;
 	    dontInstall = true;
 	    dontUnpack = true;
-	    nativeBuildInputs = [pkgs.ghc];
+	    nativeBuildInputs = [pkgs.kotlin];
 	    buildPhase = ''
-		mkdir -p $out/bin
-		ghc $src -o $out/bin/weekday
+		mkdir -p $out/{bin,lib}
+		kotlinc $src -d -include-runtime $out/lib/mireaweek.jar
+                printf "${pkgs.java}/bin/java -jar ../lib/mireaweek.jar" > $out/bin/mireaweek
+		chmod +x $out/bin/mireaweek
 	    '';
-};
-    preparejgmenu = (pkgs.writeShellScript "preparejgmenu"
-''
-str=$(cat - | sed "/soffice --math/d; /soffice --draw/d; /IntelliJ IDEA Community Edition/d; /startcenter/d; /soffice --base/d; /apps-dir-Settings/d; /tint2conf/d; /nvidia-settings/d; /--desktop-pref/d; /xterm/d; /jgmenu/d; /tint2/d;
-s/,applications-system/,applications-system,\nВыключение...,^checkout(apps-dir-Powermenu),applications-powermenu/;
-s/\^tag(apps-dir-Powermenu)/\^tag(apps-dir-Powermenu)\nArchi (Archimate Modeling Tool),Archi,Archi,,#Education/; 
-s/(Free Java.*)//;
-s/,applications-office/,applcations-office\nБД и проек-ие,^checkout(apps-dir-Database),applications-database/;
-/\^tag(apps-dir-Education)/d;
-s/apps-dir-Other/apps-dir-Database/;
-/Прочее/d;
-s/\^tag(apps-dir-Programming)/\^tag(apps-dir-Programming)\nSimInTech,simintech,simintech,,#Education/;
-s/\^tag(apps-dir-Database)/\^tag(apps-dir-Database)\nArchi (Archimate Modeling Tool),Archi,Archi,,#Education/; ")
-
-printf "$str\n\n^tag(apps-dir-Powermenu)\nВыключить,${powermenu} poweroff,,,#System\nПерезагрузить,${powermenu} reboot,,,#System\n"
-'');
+      
+    };
+    prepare_jgmenu = pkgs.stdenv.mkDerivation rec {
+	    pname = "prepare_jgmenu";
+	    version = "0.1.0";
+	    src = ./JgmenuCorrector.kt;
+	    dontInstall = true;
+	    dontUnpack = true;
+	    nativeBuildInputs = [pkgs.kotlin];
+	    buildPhase = ''
+		mkdir -p $out/{bin,lib}
+		kotlinc $src -d -include-runtime $out/lib/prepare.jar
+                printf "${pkgs.java}/bin/java -jar ../lib/prepare.jar" > $out/bin/prepare_jgmenu
+		chmod +x $out/bin/prepare_jgmenu
+	    '';
+    };
     myxinitrc = pkgs.writeText ".xinitrc" "${tint2custom} &\n${pcmanfmdesktop} &\nexec ${pkgs.metacity}/bin/metacity";
     startmireadesktop = pkgs.writeShellScript "startmireadesktop"
     ''
@@ -141,6 +142,7 @@ pcmanfmdesktop = pkgs.writeShellScript "pcmanfm"
 ${pkgs.pcmanfm}/bin/pcmanfm --desktop 
 '';
 in {
+    packages.x86_64-linux.powermenu = powermenu; # must be imported into configuration.nix!
     packages.x86_64-linux.tint2 = tint2custom;
     packages.x86_64-linux.pcmanfm = pcmanfmdesktop;
     packages.x86_64-linux.startmireadesktop = startmireadesktop;
