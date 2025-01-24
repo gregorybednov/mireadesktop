@@ -101,7 +101,7 @@ fi
 		mkdir -p $out/{bin,lib}
 		kotlinc $src -include-runtime -d mireaweek.jar
                 mv mireaweek.jar $out/lib
-                printf "${pkgs.jre}/bin/java -jar ../lib/mireaweek.jar" > $out/bin/mireaweek
+                printf "${pkgs.jre}/bin/java -jar $out/lib/mireaweek.jar" > $out/bin/mireaweek
 		chmod +x $out/bin/mireaweek
 	    '';
       
@@ -117,7 +117,7 @@ fi
 		mkdir -p $out/{bin,lib}
 		kotlinc $src -include-runtime -d prepare.jar
 		mv prepare.jar $out/lib
-                printf "${pkgs.jre}/bin/java -jar ../lib/prepare.jar" > $out/bin/prepare_jgmenu
+                printf "${pkgs.jre}/bin/java -jar $out/lib/prepare.jar" > $out/bin/prepare_jgmenu
 		chmod +x $out/bin/prepare_jgmenu
 	    '';
     };
