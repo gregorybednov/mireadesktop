@@ -99,7 +99,7 @@ fi
 	    nativeBuildInputs = [pkgs.kotlin];
 	    buildPhase = ''
 		mkdir -p $out/{bin,lib}
-		kotlinc $src -d -include-runtime mireaweek.jar
+		kotlinc $src -include-runtime -d mireaweek.jar
                 mv mireaweek.jar $out/lib
                 printf "${pkgs.jre}/bin/java -jar ../lib/mireaweek.jar" > $out/bin/mireaweek
 		chmod +x $out/bin/mireaweek
@@ -115,7 +115,7 @@ fi
 	    nativeBuildInputs = [pkgs.kotlin];
 	    buildPhase = ''
 		mkdir -p $out/{bin,lib}
-		kotlinc $src -d -include-runtime prepare.jar
+		kotlinc $src -include-runtime -d prepare.jar
 		mv prepare.jar $out/lib
                 printf "${pkgs.jre}/bin/java -jar ../lib/prepare.jar" > $out/bin/prepare_jgmenu
 		chmod +x $out/bin/prepare_jgmenu
