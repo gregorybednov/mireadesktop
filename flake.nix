@@ -122,7 +122,7 @@ fi
 	    '';
     };
     myxinitrc = pkgs.writeText ".xinitrc" "${tint2custom} &\n${pcmanfmdesktop} &\nexec ${pkgs.metacity}/bin/metacity";
-    startmireadesktop = pkgs.writeShellScript "startmireadesktop"
+    resethome = pkgs.writeShellScript "startmireadesktop"
     ''
         rm -rf $HOME/{*,.*} 2> /dev/null # wipe student directory, yeah!
         printf "[client]\nport=3306\nuser=root" > /home/student/.my.cnf
@@ -130,7 +130,7 @@ fi
         mkdir -p "$HOME/.config/pcmanfm/default"
         cp ${desktopItems0} "$HOME/.config/pcmanfm/default/desktop-items-0.conf"
         cp   ${pcmanfmConf} "$HOME/.config/pcmanfm/default/pcmanfm.conf"
-        chmod +w "$HOME/.config/pcmanfm/default/*"
+        chmod +w -R "$HOME/.config/pcmanfm/default/"
         mkdir -p "$HOME/.config/gtk-3.0"
         printf "[Settings]\ngtk-icon-theme-name = WhiteSur" > "$HOME/.config/gtk-3.0/settings.ini"
     '';
@@ -146,7 +146,7 @@ in {
     packages.x86_64-linux.powermenu = powermenu; # must be imported into configuration.nix!
     packages.x86_64-linux.tint2 = tint2custom;
     packages.x86_64-linux.pcmanfm = pcmanfmdesktop;
-    packages.x86_64-linux.startmireadesktop = startmireadesktop;
+    packages.x86_64-linux.resethome = resethome;
     defaultPackage.x86_64-linux = startmireadesktop;
 };
 }
