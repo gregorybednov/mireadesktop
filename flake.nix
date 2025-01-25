@@ -147,6 +147,6 @@ in {
     packages.x86_64-linux.tint2 = tint2custom;
     packages.x86_64-linux.pcmanfm = pcmanfmdesktop;
     packages.x86_64-linux.resethome = resethome;
-    defaultPackage.x86_64-linux = startmireadesktop;
+    defaultPackage.x86_64-linux = resethome;
 };
 }
