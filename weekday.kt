@@ -1,7 +1,6 @@
-import java.time.LocalDate
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.Month
-import java.time.format.DateTimeFormatter
 
 enum class Period {
     Autumn,
@@ -9,49 +8,45 @@ enum class Period {
     Spring
 }
 
-fun period(thisYear: (Month) -> LocalDate, today: LocalDate): Period {
+fun determinePeriod(today: LocalDate): Period {
+    val februaryCutoff = LocalDate.of(today.year, Month.FEBRUARY, 9)
+    val septemberCutoff = LocalDate.of(today.year, Month.SEPTEMBER, 1)
+
     return when {
-        today.isBefore(thisYear(Month.FEBRUARY).plusDays(9)) -> Period.Winter
-        today.isAfter(thisYear(Month.SEPTEMBER).minusDays(1)) -> Period.Autumn
+        today.isBefore(februaryCutoff) -> Period.Winter
+        today.isAfter(septemberCutoff.minusDays(1)) -> Period.Autumn
         else -> Period.Spring
     }
 }
 
-fun week(p: Period, d: LocalDate): String {
-    return when (p) {
-        Period.Winter -> "Хороших праздников, удачной сессии!"
+fun calculateWeek(period: Period, date: LocalDate): String {
+    return when {
+        period == Period.Winter -> "Хороших праздников, удачной сессии!"
+        date.dayOfWeek == DayOfWeek.SUNDAY -> "Сегодня воскресенье, лучше иди домой"
         else -> {
-            if (d.dayOfWeek == DayOfWeek.SUNDAY) {
-                "Сегодня воскресенье, лучше иди домой"
-            } else {
-                val (y, x0) = toWeekDate(d)
-                val limit = if (p == Period.Spring) thisYear(Month.FEBRUARY).plusDays(9) else thisYear(Month.SEPTEMBER).plusDays(1)
-                val (_, x1) = toWeekDate(limit)
-                val limitIsSunday = limit.dayOfWeek == DayOfWeek.SUNDAY
-                val x = 1 + x0 - x1 - if (limitIsSunday) 1 else 0
-                "$x неделя"
+            val currentWeek = date.getWeekOfYear()
+            val periodLimit = when (period) {
+                Period.Spring -> LocalDate.of(date.year, Month.FEBRUARY, 9)
+                Period.Autumn -> LocalDate.of(date.year, Month.SEPTEMBER, 1)
+                else -> throw IllegalStateException("Unexpected period")
             }
+            val limitWeek = periodLimit.getWeekOfYear()
+            val isLimitSunday = periodLimit.dayOfWeek == DayOfWeek.SUNDAY
+
+            val weekOffset = if (isLimitSunday) 1 else 0
+            val weekNumber = 1 + currentWeek - limitWeek - weekOffset
+            "$weekNumber неделя"
         }
     }
 }
 
-fun toWeekDate(date: LocalDate): Pair<Int, Int> {
-    val weekOfYear = date.get(java.time.temporal.ChronoField.ALIGNED_WEEK_OF_YEAR)
-    val year = date.year
-    return Pair(year, weekOfYear.toInt())
-}
-
-fun thisYear(month: Month): LocalDate {
-    val now = LocalDate.now()
-    return LocalDate.of(now.year, month, 1)
+fun LocalDate.getWeekOfYear(): Int {
+    return this.get(java.time.temporal.ChronoField.ALIGNED_WEEK_OF_YEAR)
 }
 
 fun main() {
     val today = LocalDate.now()
-    val (year, _, _) = today.toGregorian()
-    println(week(period(::thisYear, today), today))
-}
-
-fun LocalDate.toGregorian(): Triple<Int, Int, Int> {
-    return Triple(this.year, this.monthValue, this.dayOfMonth)
+    val period = determinePeriod(today)
+    val weekInfo = calculateWeek(period, today)
+    println(weekInfo)
 }
